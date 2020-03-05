@@ -125,10 +125,10 @@ au FileType xml exe ":silent 1,$!xmllint --format --recover - 2>/dev/null"
 
 :autocmd Filetype ruby set softtabstop=2
 :autocmd Filetype ruby set shiftwidth=2
-:autocmd Filetype ruby set tabstop==2
+:autocmd Filetype ruby set tabstop=2
 :autocmd Filetype yaml set softtabstop=2
 :autocmd Filetype yaml set shiftwidth=2
-:autocmd Filetype yaml set tabstop==2
+:autocmd Filetype yaml set tabstop=2
 
 """"""""""""""""""""""""""""""
 " Formatters
