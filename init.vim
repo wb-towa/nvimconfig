@@ -1,4 +1,4 @@
-" NVIM Config - Updated 2020.02.29
+" NVIM Config - Updated 2020.03.07
 " Mostly a port of a vimconfig and a work in progress.
 
 
@@ -8,28 +8,29 @@ if has("syntax")
   syntax on
 endif
 
-filetype on         "enables filetype detection
-filetype plugin on  "enables filetype specific plugins
-set guioptions-=T   "remove toolbar
+filetype on            "enables filetype detection
+filetype plugin on     "enables filetype specific plugins
+set guioptions-=T      "remove toolbar
 set expandtab
-set tabstop=4       "set tabstop at 4
+set tabstop=4          "set tabstop at 4
 set softtabstop=4
-set hlsearch        "highlight searches
-set shiftwidth=4    "numbers of spaces to (auto)indent
-set ruler           "show the cursor position all the time
-set number          "show line numbers
-set backspace=2     "make backspace work more as expected - mainly for windows
-"set autoindent     "always set autoindenting on
-"set smartindent    "smart indent
-"set cindent        "cindent
+set hlsearch           "highlight searches
+set shiftwidth=4       "numbers of spaces to (auto)indent
+set ruler              "show the cursor position all the time
+set number             "show line numbers
+set backspace=2        "make backspace work more as expected - mainly for windows
+"set autoindent        "always set autoindenting on
+"set smartindent       "smart indent
+"set cindent           "cindent
 set noautoindent
 set nosmartindent
 set nocindent
 set nocursorcolumn
+set fileencoding=utf-8 "set the encoding of files written
 set encoding=utf-8
 set ffs=unix,dos
 set t_Co=256
-set laststatus=2    " show status bar. CLI vim doesn't show it
+set laststatus=2       "show status bar. CLI vim doesn't show it
 set spelllang=en_gb
 "Ignore lists roughly broken into types for easier referencing
 set wildignore+=*.exe,CVS,*.class,*.dll,*.pyc,*.bak,*.so,*.swp,*.jar,*.desktop
@@ -181,6 +182,7 @@ Plug 'fatih/vim-go'
 Plug 'rust-lang/rust.vim'
 Plug 'davidhalter/jedi-vim'
 Plug 'alfredodeza/pytest.vim'
+Plug 'keith/swift.vim'
 
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'deoplete-plugins/deoplete-jedi'
@@ -192,7 +194,6 @@ Plug 'jontrainor/TaskList.vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 " may be worth reviewing https://github.com/benawad/dotfiles/blob/master/init.vim
-" for deoplete config and look for other examples
 
 " Initialize plugin system
 call plug#end()
@@ -219,41 +220,44 @@ endif
 """"""""""""""""""""""""""""""
 set lazyredraw
 let g:airline_theme             = 'powerlineish'
-let g:airline#extensions#branch#enabled     = 1
-let g:airline#extensions#syntastic#enabled  = 1
 "vim-powerline symbols
 if !exists('g:airline_symbols')
   let g:airline_symbols = {}
 endif
 
+
 if has("win32")
-    let g:airline_left_sep          = '►'
-    let g:airline_left_alt_sep      = '»'
-    let g:airline_right_sep         = '◄'
-    let g:airline_right_alt_sep     = '«'
-    let g:airline_symbols.branch    = '‡'
+    let g:airline_left_sep           = '►'
+    let g:airline_left_alt_sep       = '»'
+    let g:airline_right_sep          = '◄'
+    let g:airline_right_alt_sep      = '«'
+    let g:airline_symbols.branch     = '‡'
+    let g:airline_symbols.whitespace = 'Ξ'
+    let g:airline_symbols.linenr     = 'l:c'
+    let g:airline_symbols.paste      = 'ρ'
 else
-    let g:airline_left_sep          = '»'
-    let g:airline_left_alt_sep      = '▶'
-    let g:airline_right_sep         = '«'
-    let g:airline_right_alt_sep     = '◀'
-    let g:airline_symbols.branch    = '⎇'
+    let g:airline_left_sep           = '»'
+    let g:airline_left_alt_sep       = '▶'
+    let g:airline_right_sep          = '«'
+    let g:airline_right_alt_sep      = '◀'
+    let g:airline_symbols.branch     = '⎇'
+    let g:airline_symbols.whitespace = 'Ξ'
+    let g:airline_symbols.linenr     = '␤'
+    let g:airline_symbols.paste      = 'ρ'
 endif
-let g:airline_symbols.readonly   = '!'
-let g:airline_symbols.linenr = 'l:c'
+let g:airline_symbols.readonly       = '!'
+let g:airline#extensions#branch#enabled     = 1
+let g:airline#extensions#hunks#enabled      = 1
 let g:airline#extensions#bufferline#enabled = 1
 
-function! AirlineInit()
-  let g:airline_section_z = airline#section#create_right(['%3p%% %{g:airline_symbols.linenr} %03l:%03c %{strftime("[%H:%M %a %d.%b.%y]")}'])
-endfunction
-
-autocmd VimEnter * call AirlineInit()
+let g:airline_section_y = '%3p%% %{g:airline_symbols.linenr} %03l:%03c'
+let g:airline_section_z = '%{strftime("[%H:%M %a %d.%b.%y]")}'
 
 
 """"""""""""""""""""""""""""""
 " NerdTree
 """"""""""""""""""""""""""""""
-let g:NERDTreeQuitOnOpen = 1
+let g:NERDTreeQuitOnOpen = 0
 let g:NERDTreeChDirMode = 0
 let g:NERDTreeShowBookmarks = 1
 let NERDTreeRespectWildIgnore=1
@@ -264,8 +268,8 @@ else
     let g:NERDTreeBookmarksFile=''.$HOME.'./config/nvim/temp/nerdtree_bookmarks.txt'
 endif
 
-"map F3 to open NerdTree
-map <F3> :NERDTree $HOME<CR>
+"map F3 to open NerdTree in cwd
+map <F3> :NERDTree<CR>
 
 
 
@@ -468,7 +472,7 @@ let g:bufferline_excludes = ["^NERD_tree_[0-9]*$"]
 """"""""""""""""""""""""""""""
 let g:gitgutter_enabled=0
 let g:gitgutter_avoid_cmd_prompt_on_windows=0
-noremap <silent> <F4> :call ToggleGitGutter()<cr>
+noremap <silent> <F4> :GitGutterToggle<cr>
 
 
 """"""""""""""""""""""""""""""
@@ -511,7 +515,7 @@ set colorcolumn=80,100
 if has ("win32")
     set guifont=Courier_New:h11:cANSI
 elseif has("nvim")
-    set guifont=JetBrainsMono-Regular:h14 
+    set guifont=JetBrainsMono-Regular:h14
 endif
 
 " Toggle background color
@@ -527,3 +531,41 @@ if !has('nvim')
     set ttymouse=xterm2
 endif
 
+""""""""""""""""""""""""""""""
+"  Go
+""""""""""""""""""""""""""""""
+
+" Run goimports along gofmt on each save
+let g:go_fmt_command = "goimports"
+
+" Automatically get signature/type info for object under cursor
+let g:go_auto_type_info = 1
+
+" TIPS
+"
+" :GoRun :GoBuild :GoInstall
+"
+" :GoDef          # goto definition of object under cursor
+" gd              # also has the same effect
+" Ctrl-O / Ctrl-I # hop back to your source file/return to definition
+"
+" :GoDoc          # opens up a side window for quick documentationn
+" K               # also has the same effect
+"
+" :GoTest         # run every *_test.go file and report results
+" :GoTestFunc     # or just test the function under your cursor
+" :GoCoverage     # check your test coverage
+" :GoAlternate	# switch bewteen your test case and implementation
+"
+" :GoImport       # manage and name your imports
+" :GoImportAs
+" :GoDrop
+"
+" :GoRename       # precise renaming of identifiers
+"
+" :GoLint         # lint your code
+" :GoVer
+" :GoErrCheck
+"
+" :GoAddTags      # manage your tags
+" :GoRemoveTags
