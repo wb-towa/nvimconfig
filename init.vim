@@ -269,8 +269,10 @@ else
 endif
 
 "map F3 to open NerdTree in cwd
-map <F3> :NERDTree<CR>
+map <F3> :NERDTreeToggle<CR>
 
+" Close nvim if NERDTree is the only window left open
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 
 """"""""""""""""""""""""""""""
