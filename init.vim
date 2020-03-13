@@ -533,6 +533,15 @@ if !has('nvim')
     set ttymouse=xterm2
 endif
 
+
+""""""""""""""""""""""""""""""
+"  JavaScript / JSON
+""""""""""""""""""""""""""""""
+
+" Do NOT hide double-quotes for JSON
+autocmd FileType json let g:indentLine_enabled=0
+
+
 """"""""""""""""""""""""""""""
 "  Go
 """"""""""""""""""""""""""""""
