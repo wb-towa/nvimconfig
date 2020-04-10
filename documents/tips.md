@@ -33,25 +33,25 @@ Additional notes: [replace a word with yanked text](https://vim.fandom.com/wiki/
 
 ## Numbers
 
-`ctrl+a` - increase number
-`ctrl+x` - decrease number
+ - `ctrl+a` - increase number
+ - `ctrl+x` - decrease number
 
 
 ## Diff
 
-`:diffupdate` - re-scan the files for changes.
-`:set diffopt+=iwhite` - disable whitespace differences
+ - `:diffupdate` - re-scan the files for changes.
+ - `:set diffopt+=iwhite` - disable whitespace differences
 
-`do` - diff obtain whole block (add from other side)
-`dp` - diff put whole block (add to other side)
+ - `do` - diff obtain whole block (add from other side)
+ - `dp` - diff put whole block (add to other side)
 
-`zo` - unfold/unhide text
-`zc` - refold/rehide text
-`zr` - unfold both files completely
-`zm` - fold both files completely
+ - `zo` - unfold/unhide text
+ - `zc` - refold/rehide text
+ - `zr` - unfold both files completely
+ - `zm` - fold both files completely
 
-`]c` - advance to the next block with differences
-`[c` - reverse search for the previous block with 
+ - `]c` - advance to the next block with differences
+ - `[c` - reverse search for the previous block with 
 
 ### put / obtain selections
 
