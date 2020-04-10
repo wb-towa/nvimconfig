@@ -1,4 +1,4 @@
-" NVIM Config - Updated 2020.03.07
+" NVIM Config - Updated 2020.04.10
 " Mostly a port of a vimconfig and a work in progress.
 
 
@@ -183,6 +183,7 @@ Plug 'rust-lang/rust.vim'
 Plug 'davidhalter/jedi-vim'
 Plug 'alfredodeza/pytest.vim'
 Plug 'keith/swift.vim'
+Plug 'vim-ruby/vim-ruby'
 
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'deoplete-plugins/deoplete-jedi'
@@ -194,6 +195,9 @@ Plug 'jontrainor/TaskList.vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 " may be worth reviewing https://github.com/benawad/dotfiles/blob/master/init.vim
+" Documentation
+Plug 'vim-pandoc/vim-pandoc-syntax'
+Plug 'vim-pandoc/vim-pandoc'
 
 " Initialize plugin system
 call plug#end()
@@ -426,8 +430,16 @@ let g:ale_sign_column_always = 1
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
+let b:ale_linters = {
+        \   'ruby': ['standardrb'],
+        \   'python': ['flake8', 'pylint'],
+        \}
+let g:ale_fixers = {
+      \    'ruby': ['standardrb'],
+      \}
+
 " Check Python files with flake8 and pylint.
-let b:ale_linters = ['flake8', 'pylint']
+"let b:ale_linters = ['flake8', 'pylint']
 let g:ale_python_flake8_options = '--max-line-length=120'
 let g:ale_python_pylint_options = '--max-line-length=120'
 let g:ale_echo_msg_error_str = 'E'
@@ -472,7 +484,15 @@ let g:bufferline_excludes = ["^NERD_tree_[0-9]*$"]
 """"""""""""""""""""""""""""""
 " Git Gutter
 """"""""""""""""""""""""""""""
-let g:gitgutter_enabled=0
+
+if exists('&signcolumn')  " Vim 7.4.2201
+  set signcolumn=yes
+else
+  let g:gitgutter_sign_column_always = 1
+endif
+
+let g:gitgutter_signs = 1
+let g:gitgutter_enabled=1
 let g:gitgutter_avoid_cmd_prompt_on_windows=0
 noremap <silent> <F4> :GitGutterToggle<cr>
 
@@ -532,6 +552,26 @@ noremap <silent> <F9> :call BgToggle()<cr>
 if !has('nvim')
     set ttymouse=xterm2
 endif
+
+
+""""""""""""""""""""""""""""""
+"  Pandoc
+""""""""""""""""""""""""""""""
+let g:pandoc#modules#disabled = ["folding"]
+
+let g:pandoc#syntax#conceal#use = 0
+
+
+" TODO: Does not work but not urgent enough to fix now
+function! TogglePDConceal()
+    if g:pandoc#syntax#conceal#use != 0
+        let g:pandoc#syntax#conceal#use = 0
+    else
+        let g:pandoc#syntax#conceal#use = 1
+    endif
+endfunction
+
+noremap <silent> <F8> :call TogglePDConceal()<cr>
 
 
 """"""""""""""""""""""""""""""
