@@ -1,5 +1,7 @@
 " NVIM Config - Updated 2020.04.10
-" Mostly a port of a vimconfig and a work in progress.
+" Mostly a port of a vimconfig and a work in progress with a view to make
+" compatible with nvim and vim.
+" NOTE: can test for nvim so always assume norma vim / gvim in else statements
 
 
 " Vim5 and later versions support syntax highlighting. Uncommenting the
@@ -65,7 +67,8 @@ map <F2> :bnext<CR>
 
 " Move around windows with Alt + arrow keys
 " Note: nmap so it only works in normal mode
-if has("nvim")
+" TODO: I think the 'else' is windows so reverse and simplify?
+if has("nvim") || has("gui_macvim")
     nmap <silent> <S-Up> :wincmd k<CR>
     nmap <silent> <S-Down> :wincmd j<CR>
     nmap <silent> <S-Left> :wincmd h<CR>
@@ -537,6 +540,8 @@ set colorcolumn=80,100
 if has ("win32")
     set guifont=Courier_New:h11:cANSI
 elseif has("nvim")
+    set guifont=JetBrainsMono-Regular:h14
+else
     set guifont=JetBrainsMono-Regular:h14
 endif
 
